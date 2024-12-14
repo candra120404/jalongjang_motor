@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('rekap_antrian', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('kendaraan_id');
-            $table->date('tanggal_antrian');
-            $table->string('status');
+            $table->date('tanggal_awal'); // Tanggal awal periode rekap
+            $table->date('tanggal_akhir'); // Tanggal akhir periode rekap
+            $table->integer('total_kendaraan'); // Total kendaraan dalam periode rekap
             $table->timestamps();
-            $table->foreign('kendaraan_id')->references('id')->on('kendaraan')->onDelete('cascade');
         });
     }
 

@@ -1,33 +1,30 @@
 <?php
-
+  
 namespace App\Console\Commands;
-
+  
 use Illuminate\Console\Command;
-
-// app/Console/Commands/RunRekapMingguan.php
-
-namespace App\Console\Commands;
-
-use App\Jobs\RekapMingguan;
-use Illuminate\Console\Command;
-
-class RunRekapMingguan extends Command
+  
+class TestJob extends Command
 {
-    // Nama dan deskripsi command
-    protected $signature = 'rekap:run-every-10-seconds';
-    protected $description = 'Jalankan job RekapMingguan setiap 10 detik';
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:test-job';
+  
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+  
+    /**
+     * Execute the console command.
+     */
     public function handle()
     {
-        // Loop yang menjalankan job setiap 10 detik
-        while (true) {
-            RekapMingguan::dispatch(); // Dispatch job
-            sleep(10); // Delay 10 detik
-        }
+        info('Command runs every minute.');
     }
 }

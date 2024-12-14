@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class RekapAntrian extends Model
 {
     use HasFactory;
-    protected $table = 'rekap_antrian';
-    protected $fillable = ['kendaraan_id', 'tanggal_antrian', 'status'];
 
-    public function kendaraan()
-    {
-        return $this->belongsTo(Kendaraan::class);
-    }
+    protected $table = 'rekap_antrian';
+
+    protected $fillable = [
+        'tanggal_awal',
+        'tanggal_akhir',
+        'total_kendaraan',
+    ];
 }
