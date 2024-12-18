@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overview</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
-    <h1>Halaman overview</h1>
-
-</body>
-
-</html>
+<x-layout>
+    <div class="container mx-auto p-4">
+        <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold text-center text-gray-700 mb-4">Total Pelanggan</h2>
+                <div class="text-center text-4xl font-bold text-blue-600">
+                    {{ $totalPelanggan }}
+                </div>
+            </div>
+        </div>
+    </div>
+</x-layout>
