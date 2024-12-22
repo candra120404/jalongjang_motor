@@ -1,65 +1,44 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\RekapAntrian;
-use App\Models\AntrianCuci;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class RekapAntrianController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil data rekap mingguan
-        $rekapAntrian = RekapAntrian::orderBy('tanggal_awal', 'desc')->get();
+        // Ambil data rekap antrian, kelompokan berdasarkan bulan dan tahun, kemudian jumlahkan total kendaraan
+        $rekapData = RekapAntrian::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(total_kendaraan) as total_kendaraan')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
 
-        // Pagination manual
-        $perPage = 5; // Jumlah item per halaman
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $paginatedRekap = new LengthAwarePaginator(
-            $rekapAntrian->slice(($currentPage - 1) * $perPage, $perPage)->values(),
-            $rekapAntrian->count(),
-            $perPage,
-            $currentPage,
-            ['path' => $request->url(), 'query' => $request->query()]
-        );
-
-        // Kirim data ke view
-        return view('rekap.mingguan', compact('paginatedRekap'));
+        // Kirim data ke tampilan
+        return view('rekap.mingguan', compact('rekapData'));
     }
 
-    // Fungsi untuk generate rekap mingguan
-    public function generateRekap()
+    public function cetakAntrianPerTanggal($tglAwal, $tglAkhir)
     {
-        // Cari minggu terakhir
-        $startDate = now()->startOfWeek();
-        $endDate = now()->endOfWeek();
+        // Ambil data rekap dari database berdasarkan rentang tanggal
+        $rekapPerTanggal = RekapAntrian::whereBetween('tanggal', [$tglAwal, $tglAkhir])->get();
 
-        // Hitung total kendaraan yang sudah selesai cuci dalam periode tersebut
-        $totalKendaraan = AntrianCuci::whereBetween('tanggal_antrian', [$startDate, $endDate])
-            ->where('status', 'selesai') // Hanya kendaraan dengan status 'selesai'
-            ->count();
+        // Cek jika data tidak ditemukan
+        if ($rekapPerTanggal->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada data untuk rentang tanggal yang dipilih.');
+        }
 
-        // Simpan ke tabel RekapAntrian
-        RekapAntrian::create([
-            'tanggal_awal' => $startDate,
-            'tanggal_akhir' => $endDate,
-            'total_kendaraan' => $totalKendaraan,
+        // Buat PDF dengan data yang diambil
+        $pdf = Pdf::loadView('rekap.rekap', [
+            'rekap' => $rekapPerTanggal,
+            'tglAwal' => $tglAwal,
+            'tglAkhir' => $tglAkhir,
         ]);
-        return redirect()->route('rekap.mingguan'); 
-    }
 
-    // Fungsi untuk download PDF rekap mingguan
-    public function downloadRekapPdf()
-    {
-        // Ambil semua data rekap mingguan
-        $rekap = RekapAntrian::all();
-
-        // Membuat PDF dari view
-        $pdf = Pdf::loadView('rekap.rekap', compact('rekap'));
-
-        // Mengunduh file PDF
-        return $pdf->download('rekap_antrian.pdf');
+        // Unduh file PDF
+        return $pdf->download("rekap-antrian-{$tglAwal}-sampai-{$tglAkhir}.pdf");
     }
 }

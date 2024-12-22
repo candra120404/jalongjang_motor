@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Rekap Antrian</title>
@@ -9,26 +10,30 @@
             border-collapse: collapse;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid black;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
         }
     </style>
 </head>
+
 <body>
 
     <h1>Rekap Mingguan Antrian Cuci</h1>
+    <h2>Periode: {{ $tglAwal }} - {{ $tglAkhir }}</h2>
 
     <table>
         <thead>
             <tr>
                 <th>No</th>
-                <th>Tanggal Awal</th>
-                <th>Tanggal Akhir</th>
+                <th>Tanggal</th>
                 <th>Total Kendaraan</th>
             </tr>
         </thead>
@@ -36,8 +41,7 @@
             @foreach ($rekap as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->tanggal_awal }}</td>
-                    <td>{{ $item->tanggal_akhir }}</td>
+                    <td>{{ $item->tanggal }}</td>
                     <td>{{ $item->total_kendaraan }}</td>
                 </tr>
             @endforeach
@@ -45,4 +49,5 @@
     </table>
 
 </body>
+
 </html>

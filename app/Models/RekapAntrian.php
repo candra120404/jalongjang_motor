@@ -12,8 +12,7 @@ class RekapAntrian extends Model
     protected $table = 'rekap_antrian';
 
     protected $fillable = [
-        'tanggal_awal',
-        'tanggal_akhir',
+        'tanggal',
         'total_kendaraan',
     ];
 }

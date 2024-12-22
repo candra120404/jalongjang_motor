@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('rekap_antrian', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal_awal'); // Tanggal awal periode rekap
-            $table->date('tanggal_akhir'); // Tanggal akhir periode rekap
+            $table->date('tanggal'); // Tanggal
             $table->integer('total_kendaraan'); // Total kendaraan dalam periode rekap
             $table->timestamps();
         });
