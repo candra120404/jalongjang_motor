@@ -10,15 +10,8 @@ class RekapAntrianController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil data rekap antrian, kelompokan berdasarkan bulan dan tahun, kemudian jumlahkan total kendaraan
-        $rekapData = RekapAntrian::selectRaw('YEAR(tanggal) as year, MONTH(tanggal) as month, SUM(total_kendaraan) as total_kendaraan')
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
-
         // Kirim data ke tampilan
-        return view('rekap.mingguan', compact('rekapData'));
+        return view('rekap.mingguan');
     }
 
     public function cetakAntrianPerTanggal($tglAwal, $tglAkhir)

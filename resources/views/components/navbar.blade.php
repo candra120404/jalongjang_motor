@@ -3,21 +3,31 @@
         <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
                 <div class="shrink-0">
-                    <img class="size-8" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company">
+                    <h1>Jalongjang Motor</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="/overview" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
-                            aria-current="page">Dashboard</a>
-                        <a href="/antrian"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Antrian</a>
-                        <a href="/rekap"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Rekap</a>
+                        <a href="{{ route('overview.index') }}"
+                            class="{{ Route::currentRouteName() === 'overview.index' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">
+                            Overview
+                        </a>
+                        <a href="{{ route('antrian.index') }}"
+                            class="{{ Route::currentRouteName() === 'antrian.index' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">
+                            Antrian
+                        </a>
+                        <a href="{{ route('rekap.mingguan') }}"
+                            class="{{ Route::currentRouteName() === 'rekap.mingguan' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">
+                            Rekap
+                        </a>
                     </div>
                 </div>
             </div>
+            <div>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button class="btn">Logout</button>
+                </form>
+            </div>
         </div>
     </div>
-
 </nav>

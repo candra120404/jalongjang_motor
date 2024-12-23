@@ -1,7 +1,6 @@
-<x-layout>
+<x-layout :data="['user' => auth()->user()]" :title="['title' => 'REKAP']">
     <div class="container mx-auto p-4">
         <h1 class="mb-4">Rekap Mingguan Antrian Cuci</h1>
-        <canvas id="rekapChart" width="400" height="100"></canvas>
         <div class="flex flex-col items-center justify-center">
             <div class="w-full bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-lg font-semibold text-gray-800 mb-4">Pilih Rentang Tanggal</h2>
@@ -25,60 +24,6 @@
                 </a>
             </div>
         </div>
-
-        <script>
-            // Ambil data dari controller
-            const rekapData = @json($rekapData);
-
-            // Buat array label untuk semua bulan dalam setahun
-            const months = [
-                "Januari", "Februari", "Maret", "April",
-                "Mei", "Juni", "Juli", "Agustus",
-                "September", "Oktober", "November", "Desember"
-            ];
-
-            // Map data untuk mendapatkan total kendaraan per bulan yang ada
-            const dataPerMonth = months.map((month, index) => {
-                const yearData = rekapData.find(item => item.month - 1 === index);
-                return yearData ? yearData.total_kendaraan : 0;
-            });
-
-            // Siapkan labels (bulan-bulan dalam setahun)
-            const labels = months;
-
-            // Siapkan data untuk chart
-            const ctx = document.getElementById('rekapChart').getContext('2d');
-            const rekapChart = new Chart(ctx, {
-                type: 'line', // Jenis chart (bar chart)
-                data: {
-                    labels: labels, // Nama bulan
-                    datasets: [{
-                        label: 'Total Kendaraan',
-                        data: dataPerMonth,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Bulan'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Total Kendaraan'
-                            },
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        </script>
 
 
 </x-layout>

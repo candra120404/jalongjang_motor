@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite(['resources/css/app.css'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Document</title>
+    <title>{{ $title['title'] ?? '' }} | JALONGJANG MOTOR</title>
 </head>
 
 <body>
@@ -20,10 +20,10 @@
   ```
 -->
     <div class="min-h-full">
-        <x-navbar>
+        <x-navbar :title="$title">
         </x-navbar>
 
-        <x-header></x-header>
+        <x-header :title="$title" :data="$data"></x-header>
         <main>
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 {{ $slot }}
