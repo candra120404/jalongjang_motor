@@ -48,7 +48,7 @@ class PelangganController extends Controller
             ]);
         }
 
-        return redirect()->route('pelanggan.index')->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('pelanggan.index')->with('cuciMotor', 'Berhasil daftar, silahkan ke tempat cuci jalongjang motor.');
     }
     public function cekAntrianTerkini()
     {

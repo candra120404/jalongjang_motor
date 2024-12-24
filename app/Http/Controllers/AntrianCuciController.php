@@ -10,7 +10,7 @@ class AntrianCuciController extends Controller
 {
     public function index()
     {
-        $antrian = AntrianCuci::with('kendaraan.pelanggan')->get();
+        $antrian = AntrianCuci::with('kendaraan.pelanggan')->paginate(5);
         return view('admin.index', compact('antrian'));
     }
 
@@ -47,10 +47,6 @@ class AntrianCuciController extends Controller
         // Redirect kembali ke halaman daftar antrian dengan pesan sukses
         return redirect()->route('antrian.index')->with('success', 'Status antrian berhasil diperbarui.');
     }
-
-    // Fungsi untuk menyimpan data ke tabel RekapAntrian
-    // Fungsi untuk menyimpan data ke tabel RekapAntrian
-    // Fungsi untuk menyimpan data ke tabel RekapAntrian
     // Fungsi untuk menyimpan data ke tabel RekapAntrian
     private function saveToRekapAntrian(AntrianCuci $antrianCuci)
     {

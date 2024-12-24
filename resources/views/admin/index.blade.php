@@ -1,5 +1,14 @@
 <x-layout :data="['user' => auth()->user()]" :title="['title' => 'ANTRIAN']">
     <div class="container mx-auto p-4">
+        <!-- Form pencarian -->
+        <form action="{{ route('antrian.index') }}" method="GET" class="mb-4">
+            <input type="text" name="search" value="{{ request('search') }}"
+                placeholder="Cari berdasarkan nama pelanggan"
+                class="bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-1/2 md:w-1/3">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2 sm:mt-0 sm:ml-2">
+                Cari
+            </button>
+        </form>
         <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
             <table class="min-w-full table-auto">
                 <thead class="bg-gray-100">
@@ -45,6 +54,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <!-- Pagination Links -->
+            <div class="mt-4 p-2">
+                {{ $antrian->links() }}
+            </div>
         </div>
     </div>
 </x-layout>
