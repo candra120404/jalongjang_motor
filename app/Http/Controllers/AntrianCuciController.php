@@ -19,9 +19,8 @@ class AntrianCuciController extends Controller
                 });
             })
             ->paginate(5)
-            ->onEachSide(2)
-            ->appends(['search' => $search]); // Tambahkan query string "search"
-
+            ->appends(['search' => $search])
+            ->fragment('antrian_cuci');
 
         return view('admin.index', compact('antrian', 'search'));
     }
@@ -58,8 +57,9 @@ class AntrianCuciController extends Controller
             $this->saveToRekapAntrian($statusUpdate);
         }
 
-        // Redirect kembali ke halaman daftar antrian dengan pesan sukses
-        return redirect()->route('antrian.index')->with('success', 'Status antrian berhasil diperbarui.');
+        return redirect()
+            ->route('antrian.index', ['page' => $request->page])
+            ->with('success', 'Status berhasil diubah!');
     }
     // Fungsi untuk menyimpan data ke tabel RekapAntrian
     private function saveToRekapAntrian(AntrianCuci $antrianCuci)
