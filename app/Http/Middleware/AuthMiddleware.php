@@ -24,10 +24,11 @@ class AuthMiddleware
 
         // Jika pengguna sudah login tetapi mencoba mengakses halaman login
         if (Auth::check() && $request->routeIs('login.index')) {
-            return redirect()->route('overview.index'); // Redirect ke halaman dashboard
+            // Redirect ke halaman dashboard/overview setelah login
+            return redirect()->route('overview.index');
         }
 
-        // Lanjutkan ke permintaan berikutnya
+        // Lanjutkan ke permintaan berikutnya jika kondisi di atas tidak terpenuhi
         return $next($request);
     }
 }
