@@ -3,7 +3,7 @@
         <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
                 <div class="shrink-0">
-                    <h1>Jalongjang Motor</h1>
+                    <h1 class="text-white font-extrabold">Jalongjang Motor</h1>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -25,7 +25,7 @@
             <div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button class="btn">Logout</button>
+                    <button class="btn bg-indigo-500 p-2 rounded-md text-white">Logout</button>
                 </form>
             </div>
         </div>
