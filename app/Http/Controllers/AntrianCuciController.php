@@ -8,11 +8,25 @@ use Illuminate\Http\Request;
 
 class AntrianCuciController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $antrian = AntrianCuci::with('kendaraan.pelanggan')->paginate(5);
-        return view('admin.index', compact('antrian'));
+        $search = $request->input('search'); // Ambil input dari form pencarian
+
+        $antrian = AntrianCuci::with('kendaraan.pelanggan')
+            ->when($search, function ($query) use ($search) {
+                return $query->whereHas('kendaraan.pelanggan', function ($query) use ($search) {
+                    $query->where('nama', 'like', '%' . $search . '%');
+                });
+            })
+            ->paginate(5)
+            ->onEachSide(2)
+            ->appends(['search' => $search]); // Tambahkan query string "search"
+
+
+        return view('admin.index', compact('antrian', 'search'));
     }
+
+
 
     public function store(Request $request)
     {
