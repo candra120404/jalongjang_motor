@@ -67,13 +67,15 @@
                                     @method('PUT')
                                     <input type="hidden" name="page" value="{{ request('page') }}">
                                     <select name="status" onchange="this.form.submit()"
-                                        class="bg-blue-500 text-white px-3 py-1 rounded-md shadow hover:bg-blue-600">
+                                        class="bg-blue-500 text-white px-3 py-1 rounded-md shadow hover:bg-blue-600"
+                                        {{ $a->status == 'selesai' ? 'disabled' : '' }}>
                                         <option value="menunggu" {{ $a->status == 'menunggu' ? 'selected' : '' }}>
                                             Menunggu</option>
                                         <option value="selesai" {{ $a->status == 'selesai' ? 'selected' : '' }}>Selesai
                                         </option>
                                     </select>
                                 </form>
+
                                 <button id="show-user"
                                     class="px-4 py-1 text-white bg-orange-500 rounded hover:bg-orange-700"
                                     data-url="{{ $a->id }}">
