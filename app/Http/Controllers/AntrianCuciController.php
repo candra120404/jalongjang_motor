@@ -5,26 +5,56 @@ namespace App\Http\Controllers;
 use App\Models\AntrianCuci;
 use App\Models\RekapAntrian;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class AntrianCuciController extends Controller
 {
+
+
+
     public function index(Request $request)
     {
-        $search = $request->input('search'); // Ambil input dari form pencarian
+        $search = $request->input('search');
+        $month = $request->input('month') ?: Carbon::now()->month; // Default ke bulan saat ini jika tidak dipilih
+        $year = $request->input('year') ?: Carbon::now()->year; // Default ke tahun saat ini jika tidak dipilih
 
-        $antrian = AntrianCuci::with('kendaraan.pelanggan')
-            ->when($search, function ($query) use ($search) {
-                return $query->whereHas('kendaraan.pelanggan', function ($query) use ($search) {
-                    $query->where('nama', 'like', '%' . $search . '%');
-                });
-            })
-            ->paginate(5)
-            ->appends(['search' => $search])
+        $query = AntrianCuci::with('kendaraan.pelanggan');
+
+        // Filter berdasarkan bulan jika ada
+        if ($month) {
+            $query->whereMonth('tanggal_antrian', $month);
+        }
+
+        // Filter berdasarkan tahun jika ada
+        if ($year) {
+            $query->whereYear('tanggal_antrian', $year);
+        }
+
+        // Tambahkan filter pencarian
+        $query->when($search, function ($query) use ($search) {
+            return $query->whereHas('kendaraan.pelanggan', function ($query) use ($search) {
+                $query->where('nama', 'like', '%' . $search . '%');
+            });
+        });
+
+        $antrian = $query->paginate(5)
+            ->appends(['search' => $search, 'month' => $month, 'year' => $year])
             ->fragment('antrian_cuci');
 
-        return view('admin.index', compact('antrian', 'search'));
+        return view('admin.index', compact(
+            'antrian',
+            'search',
+            'month',
+            'year'
+        ));
     }
 
+    public function show($id)
+    {
+        $antrian_detail = AntrianCuci::with(['kendaraan.pelanggan'])->findOrFail($id);
+        return response()->json($antrian_detail);
+    }
 
 
     public function store(Request $request)

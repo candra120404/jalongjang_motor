@@ -48,6 +48,9 @@
                     Login
                 </button>
             </div>
+            <div class="text-center mt-3">
+                Lupa password? <a href="password/reset" class="text-indigo-500">disini</a>
+            </div>
         </form>
     </div>
 </body>

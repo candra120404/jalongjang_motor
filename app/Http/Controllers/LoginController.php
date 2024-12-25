@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 
 class LoginController extends Controller
 {
@@ -26,6 +27,8 @@ class LoginController extends Controller
         }
         return back()->withErrors(['email' => 'Invalid credentials']);
     }
+
+
 
     public function logout(Request $request)
     {

@@ -11,7 +11,8 @@
 
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
     <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
-        <h1 class="text-center text-2xl font-bold text-gray-700 mb-6">Form cuci motor</h1>
+        <h1 class="text-center text-2xl font-bold text-gray-700 mb-6">Jalongjang Motor</h1>
+        <h2 class="text-center text-lg font-semibold text-gray-700 mb-4">solusi bersih untuk kendaraan anda</h2>
         <p class="text-center mb-2">Selamat datang di <strong>Jalongjang Motor!</strong> Isi formulir di bawah ini untuk
             mendaftarkan
             kendaraan

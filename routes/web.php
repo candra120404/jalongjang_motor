@@ -6,6 +6,7 @@ use App\Http\Controllers\AntrianCuciController;
 use App\Http\Controllers\RekapAntrianController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OverviewController;
+use App\Http\Controllers\PasswordResetController;
 
 Route::get('/', function () {
     return redirect()->route('pelanggan.index');
@@ -27,7 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/overview', [OverviewController::class, 'index'])->name('overview.index');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::resource('antrian', AntrianCuciController::class);
-    Route::put('/antrian/{antrianCuci}', [AntrianCuciController::class, 'update'])->name('antrian.update');
     Route::get('/rekap', [RekapAntrianController::class, 'index'])->name('rekap.mingguan');
     Route::get('/rekap/{tglAwal}/{tglAkhir}', [RekapAntrianController::class, 'cetakAntrianPerTanggal'])->name('rekap.cetakAntrianPerTanggal');
     Route::get('/rekap/download-pdf', [RekapAntrianController::class, 'downloadRekapPdf'])->name('rekap.downloadPdf');

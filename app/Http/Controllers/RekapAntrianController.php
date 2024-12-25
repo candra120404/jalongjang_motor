@@ -24,11 +24,14 @@ class RekapAntrianController extends Controller
             return redirect()->back()->with('error', 'Tidak ada data untuk rentang tanggal yang dipilih.');
         }
 
+        // Hitung total kendaraan
+        $totalKendaraan = $rekapPerTanggal->sum('total_kendaraan');
         // Buat PDF dengan data yang diambil
         $pdf = Pdf::loadView('rekap.rekap', [
             'rekap' => $rekapPerTanggal,
             'tglAwal' => $tglAwal,
             'tglAkhir' => $tglAkhir,
+            'totalKendaraan' => $totalKendaraan,
         ]);
 
         // Unduh file PDF

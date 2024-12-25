@@ -22,7 +22,12 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="flex items-center gap-5">
+                @if (isset($data['user']))
+                    <span>
+                        <strong class="text-white">{{ $data['user']->name }}</strong>
+                    </span>
+                @endif
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button class="btn bg-indigo-500 p-2 rounded-md text-white">Logout</button>

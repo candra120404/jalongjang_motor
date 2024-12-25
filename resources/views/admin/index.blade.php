@@ -3,35 +3,35 @@
     <form action="{{ route('antrian.index') }}" method="GET" class="mb-4">
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berdasarkan nama pelanggan"
             class="bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-1/2 md:w-1/3">
+
+        <select name="month" class="bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 sm:ml-2">
+            <option value="">Pilih Bulan</option>
+            @foreach (range(1, 12) as $m)
+                <option value="{{ $m }}" {{ request('month', date('n')) == $m ? 'selected' : '' }}>
+                    {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                </option>
+            @endforeach
+        </select>
+
+        <select name="year" class="bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 sm:ml-2">
+            <option value="">Pilih Tahun</option>
+            @foreach (range(date('Y') - 5, date('Y')) as $y)
+                <!-- Menampilkan 5 tahun terakhir -->
+                <option value="{{ $y }}" {{ request('year', date('Y')) == $y ? 'selected' : '' }}>
+                    {{ $y }}
+                </option>
+            @endforeach
+        </select>
+
+
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2 sm:mt-0 sm:ml-2">
             Cari
         </button>
     </form>
-    @if (session('success'))
-        <div id="alert-3" x-data="{ show: true }" x-show="show" @click.away="show = false"
-            class="flex items-center p-4 mb-2 mx-5 mt-2 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-            role="alert">
-            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                viewBox="0 0 20 20">
-                <path
-                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div class="ml-3 text-sm font-medium">
-                {{ session('success') }}
-            </div>
-            <button type="button" @click="show = false"
-                class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-                aria-label="Close">
-                <span class="sr-only">Close</span>
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                </svg>
-            </button>
-        </div>
-    @endif
+
+
+
+
     <div id="antrian_cuci" class="container mx-auto p-4">
         <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
             <table class="min-w-full table-auto">
@@ -74,7 +74,11 @@
                                         </option>
                                     </select>
                                 </form>
-
+                                <button id="show-user"
+                                    class="px-4 py-1 text-white bg-orange-500 rounded hover:bg-orange-700"
+                                    data-url="{{ $a->id }}">
+                                    detail
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -86,4 +90,89 @@
             </div>
         </div>
     </div>
+
+    {{-- modal read by id --}}
+    <div id="userShowModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+            <div class="flex justify-between items-center px-4 py-2 border-b">
+                <h5 class="text-lg font-bold">Detail</h5>
+                <button type="button" class="text-gray-500 hover:text-gray-800" id="closeModal">&times;</button>
+            </div>
+            <div class="p-4 space-y-2">
+                <p class="bg-[#f8d7da] p-2 rounded-md"><strong>ID:</strong> <span id="pelanggan-id"></span></p>
+                <p class="bg-[#d4edda] p-2 rounded-md"><strong>Name:</strong> <span id="pelanggan-name"></span></p>
+                <p class="bg-[#cce5ff] p-2 rounded-md"><strong>Alamat:</strong> <span id="pelanggan-alamat"></span></p>
+                <p class="bg-[#fff3cd] p-2 rounded-md"><strong>No Telp:</strong> <span id="pelanggan-telp"></span></p>
+                <p class="bg-[#f1f1f1] p-2 rounded-md"><strong>Kendaraan:</strong> <span
+                        id="pelanggan-kendaraan"></span></p>
+                <p class="bg-[#e2e3e5] p-2 rounded-md"><strong>Tahun Kendaraan:</strong> <span
+                        id="pelanggan-tahun"></span></p>
+                <p class="bg-[#fefefe] p-2 rounded-md"><strong>No Polisi:</strong> <span
+                        id="pelanggan-no-polisi"></span></p>
+                <p class="bg-[#fde2e2] p-2 rounded-md"><strong>Tanggal:</strong> <span id="pelanggan-tanggal"></span>
+                </p>
+                <p class="bg-[#e0ffe0] p-2 rounded-md"><strong>Waktu Antrian:</strong> <span
+                        id="pelanggan-waktu"></span></p>
+                <p class="bg-[#d9ecff] p-2 rounded-md"><strong>Status:</strong> <span id="pelanggan-status"></span></p>
+            </div>
+            <div class="flex justify-end px-4 py-2 border-t">
+                <button type="button" id="closeButton"
+                    class="px-4 py-2 text-white bg-gray-600 rounded hover:bg-gray-800">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this JavaScript code -->
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('userShowModal');
+            const showButtons = document.querySelectorAll('#show-user');
+            const closeModal = document.getElementById('closeModal');
+            const closeButton = document.getElementById('closeButton');
+
+            showButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const antrianId = this.getAttribute('data-url');
+                    fetchAntrianDetails(antrianId);
+                });
+            });
+
+            [closeModal, closeButton].forEach(button => {
+                button.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                });
+            });
+
+            function fetchAntrianDetails(id) {
+                fetch(`/antrian/${id}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('pelanggan-id').textContent = data.id;
+                        document.getElementById('pelanggan-name').textContent = data.kendaraan.pelanggan.nama;
+                        document.getElementById('pelanggan-alamat').textContent = data.kendaraan.pelanggan
+                            .alamat;
+                        document.getElementById('pelanggan-telp').textContent = data.kendaraan.pelanggan
+                            .no_telepon;
+                        document.getElementById('pelanggan-kendaraan').textContent =
+                            `${data.kendaraan.jenis_kendaraan} - ${data.kendaraan.merk}`;
+                        document.getElementById('pelanggan-tahun').textContent =
+                            `${data.kendaraan.tahun}`;
+                        document.getElementById('pelanggan-no-polisi').textContent = data.kendaraan
+                            .nomor_polisi;
+                        document.getElementById('pelanggan-tanggal').textContent = data.tanggal_antrian;
+                        document.getElementById('pelanggan-waktu').textContent = data.waktu_antrian;
+                        document.getElementById('pelanggan-status').textContent = data.status;
+
+                        modal.classList.remove('hidden');
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 </x-layout>

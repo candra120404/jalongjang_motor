@@ -26,7 +26,7 @@
 
 <body>
 
-    <h1>Rekap Mingguan Antrian Cuci</h1>
+    <h1>Rekap Antrian Cuci</h1>
     <h2>Periode: {{ $tglAwal }} - {{ $tglAkhir }}</h2>
 
     <table>
@@ -47,7 +47,7 @@
             @endforeach
         </tbody>
     </table>
-
+    <h3>Total Kendaraan: {{ $totalKendaraan }}</h3>
 </body>
 
 </html>
