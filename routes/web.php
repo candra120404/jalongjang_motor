@@ -6,7 +6,7 @@ use App\Http\Controllers\AntrianCuciController;
 use App\Http\Controllers\RekapAntrianController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OverviewController;
-use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\ResetPasswordController;
 
 Route::get('/', function () {
     return redirect()->route('pelanggan.index');
@@ -21,6 +21,8 @@ Route::get('/pelanggan/cek-antrian', [PelangganController::class, 'cekAntrianTer
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login.index');
     Route::post('/login', [LoginController::class, 'proccess'])->name('login.proccess');
+    Route::get('/reset-password', [ResetPasswordController::class, 'index'])->name('reset-password.form');
+    Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword'])->name('reset-password.submit');
 });
 
 // Rute untuk pengguna yang sudah login (auth)
